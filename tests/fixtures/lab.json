@@ -1,0 +1,54 @@
+{
+  "ssh_key": "%USERPROFILE%\\.ssh\\lab_key",
+  "vms": [
+    { "name": "Proxmox-VM", "label": "Proxmox (Hyper-V)" },
+    { "name": "Linux-Desktop", "label": "Linux-Desktop (Hyper-V)" }
+  ],
+  "hosts": [
+    { "id": "proxmox", "label": "Proxmox VE", "address": "192.0.2.10", "ssh_user": "root" },
+    { "id": "desktop", "label": "Linux-Desktop", "address": "192.0.2.20", "ssh_user": "admin" },
+    { "id": "docker", "label": "docker (VM 100)", "address": "192.0.2.30", "ssh_user": "admin" }
+  ],
+  "services": [
+    { "label": "Proxmox Web-UI", "host": "proxmox", "port": 8006, "url": "https://192.0.2.10:8006" },
+    { "label": "Homepage", "host": "docker", "port": 3000, "url": "http://192.0.2.30:3000" },
+    { "label": "Dockge", "host": "docker", "port": 5001, "url": "http://192.0.2.30:5001" },
+    { "label": "Nginx Proxy Manager", "host": "docker", "port": 81, "url": "http://192.0.2.30:81" },
+    { "label": "Uptime Kuma", "host": "docker", "port": 3001, "url": "http://192.0.2.30:3001" },
+    { "label": "Vaultwarden", "host": "docker", "port": 8443, "url": "https://192.0.2.30:8443" }
+  ],
+  "rdp": {
+    "host": "desktop",
+    "username": "rdp-user",
+    "base": [
+      "dynamic resolution:i:1",
+      "redirectclipboard:i:1",
+      "audiomode:i:0",
+      "authentication level:i:2",
+      "prompt for credentials:i:0",
+      "use redirection server name:i:1"
+    ],
+    "profiles": {
+      "Desktop - alle 3": ["screen mode id:i:2", "use multimon:i:1", "selectedmonitors:s:1,2,0"],
+      "Desktop - Mitte + rechts": ["screen mode id:i:2", "use multimon:i:1", "selectedmonitors:s:1,0"],
+      "Desktop - nur Mitte": ["screen mode id:i:2", "use multimon:i:1", "selectedmonitors:s:1"],
+      "Desktop - Fenster": ["screen mode id:i:1", "use multimon:i:0", "desktopwidth:i:1920", "desktopheight:i:1080"]
+    }
+  },
+  "backup": {
+    "host": "proxmox",
+    "remote_dir": "/var/lib/vz/dump",
+    "pattern": "vzdump-qemu-100-*.vma.zst",
+    "target_dir": "D:\\Lab-Backups",
+    "keep": 4,
+    "max_age_days": 3,
+    "copy_max_age_days": 8
+  },
+  "docker": {
+    "host": "docker"
+  },
+  "proxmox": {
+    "host": "proxmox",
+    "web": "Proxmox Web-UI"
+  }
+}

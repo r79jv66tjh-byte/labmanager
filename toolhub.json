@@ -1,0 +1,39 @@
+{
+  "name": "LabManager",
+  "description": "Zentrale für das Heim-Labor unter Hyper-V/Proxmox: VMs, Hosts und Dienste mit Live-Status und echtem RAM, Verbindungen (Remotedesktop, Web, SSH), Docker-Container und Backups. Ohne Adminrechte meldet status die Hyper-V-VMs als nicht abfragbar; alles andere funktioniert.",
+  "category": "Sonstiges",
+  "start": ["dist\\LabManager.exe"],
+  "commands": [
+    {
+      "name": "status",
+      "description": "Zustand des ganzen Labs: Hyper-V-VMs, Hosts (erreichbar, RAM gemessen im Host), Proxmox-Knoten und -VMs, Dienste (antworten ja/nein) und Warnungen. Speichergrößen in Bytes.",
+      "run": ["python", "LabManager.pyw", "status"],
+      "args": [],
+      "readonly": true
+    },
+    {
+      "name": "containers",
+      "description": "Docker-Container der Docker-VM mit Stack, Zustand, Image, veröffentlichten Ports und einer Messung von CPU, RAM, Netzwerk- und Datenträger-E/A (stats ist null bei gestoppten Containern).",
+      "run": ["python", "LabManager.pyw", "containers"],
+      "args": [],
+      "readonly": true
+    },
+    {
+      "name": "backups",
+      "description": "Proxmox-Backups, Kopien auf Windows (Name, Größe in Bytes, Zeit), Proxmox-Backup-Jobs, freier Platz im Ziel, letzter Eintrag aus copy.log und Warnungen (zu alt, fehlend, Job aus).",
+      "run": ["python", "LabManager.pyw", "backups"],
+      "args": [],
+      "readonly": true
+    },
+    {
+      "name": "backup-copy",
+      "description": "Neuestes Proxmox-Backup nach Windows kopieren (Größe wird geprüft) und überzählige alte Kopien löschen; protokolliert in copy.log. Mit dry_run nur zeigen, was kopiert und gelöscht würde.",
+      "run": ["python", "LabManager.pyw", "backup-copy"],
+      "args": [
+        {"name": "dry_run", "flag": "--dry-run", "type": "boolean", "required": false, "description": "Nur Vorschau, nichts kopieren oder löschen."}
+      ],
+      "readonly": false,
+      "timeout": 3600
+    }
+  ]
+}

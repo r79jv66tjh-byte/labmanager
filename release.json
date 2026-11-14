@@ -1,0 +1,5 @@
+{
+  "name": "LabManager",
+  "entry": "LabManager.pyw",
+  "pyinstaller": ["--uac-admin"]
+}
